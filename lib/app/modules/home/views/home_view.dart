@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:netflixclone/app/modules/home/views/login_view.dart';
 
 import '../controllers/home_controller.dart';
+import 'screen.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
@@ -13,10 +15,13 @@ class HomeView extends GetView<HomeController> {
         title: const Text('HomeView'),
         centerTitle: true,
       ),
-      body: const Center(
-        child:  Text(
-          'HomeView is working',
-          style:  TextStyle(fontSize: 20),
+      body: Center(
+        child: InkWell(
+          child: const Text(
+            'HomeView is working',
+            style: TextStyle(fontSize: 20),
+          ),
+          onTap: () => Get.to(() => LoginScreen()),
         ),
       ),
     );
