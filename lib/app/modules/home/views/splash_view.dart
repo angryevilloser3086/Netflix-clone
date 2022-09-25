@@ -15,12 +15,10 @@ class SplashScreen extends GetView<SplashController> {
   }
 
   _body() {
-    return SafeArea(
+    return const SafeArea(
         child: Center(
-            child: Container(
-      child: CircularProgressIndicator(
-        color: Colors.red,
-      ),
-    )));
+            child: CircularProgressIndicator(
+              color: Colors.red,
+            )));
   }
 }

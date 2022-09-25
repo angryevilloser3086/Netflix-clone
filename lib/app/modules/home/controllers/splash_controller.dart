@@ -15,8 +15,8 @@ class SplashController extends GetxController {
   void onReady() {
     super.onReady();
     if (getStorage.read('id') != null) {
-      //Get.offAllNamed(Routes.HOME);
-      Get.off(() => MyHomePage());
+      Get.offAllNamed(Routes.HOME);
+      //Get.off(() =>  HomePage());
     } else {
       Get.offAllNamed(Routes.LOGIN);
     }

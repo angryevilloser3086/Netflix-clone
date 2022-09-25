@@ -53,7 +53,7 @@ class LoginController extends GetxController {
           .then((value) async {
         if (value.user != null) {
           getStorage.write("id", value.user?.uid);
-          Get.to(() => MyHomePage());
+          Get.to(() => HomePage());
         }
       });
     } catch (e) {
