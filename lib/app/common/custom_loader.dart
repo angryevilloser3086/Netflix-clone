@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 class CustomLoadingSpinKitRing extends StatelessWidget {
   final Color? loadingColor;
 
-  CustomLoadingSpinKitRing({
+  const CustomLoadingSpinKitRing({Key? key, 
     required this.loadingColor,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

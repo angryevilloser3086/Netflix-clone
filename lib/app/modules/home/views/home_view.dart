@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:netflixclone/app/common/movie_card.dart';
-import 'package:netflixclone/app/modules/home/views/find_view.dart';
-
+import '../../../modules/home/views/find_view.dart';
 import '../../../common/app_utils.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 import 'description_view.dart';
-import 'screen.dart';
 
 class HomeView extends GetView<HomeController> {
   HomeView({Key? key}) : super(key: key);
@@ -32,11 +29,17 @@ class HomeView extends GetView<HomeController> {
               ),
               onTap: () => Get.to(() => FindView()),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset(
-                'assets/profile.png',
-                scale: 2,
+            InkWell(
+              onTap: () {
+                homeController.getStorage.remove("id");
+                Get.offAllNamed(Routes.LOGIN);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  'assets/profile.png',
+                  scale: 2,
+                ),
               ),
             )
           ],
@@ -46,9 +49,9 @@ class HomeView extends GetView<HomeController> {
             scrollDirection: Axis.vertical,
             child: Column(
               children: [
+                AppConstants.h_10,
                 if (homeController.tv.isNotEmpty)
                   SizedBox(
-                      // color: Colors.red,
                       height: 200,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -60,13 +63,9 @@ class HomeView extends GetView<HomeController> {
                                       name:
                                           "${homeController.tv[index]['title'].toString()} ",
                                       bannerurl:
-                                          'https://image.tmdb.org/t/p/w500' +
-                                              homeController.tv[index]
-                                                  ['backdrop_path'],
+                                          "${AppConstants.kThemoviedbImageURL}${homeController.tv[index]['backdrop_path']}",
                                       posterurl:
-                                          'https://image.tmdb.org/t/p/w500' +
-                                              homeController.tv[index]
-                                                  ['poster_path'],
+                                          "${AppConstants.kThemoviedbImageURL}${homeController.tv[index]['poster_path']}",
                                       description: homeController.tv[index]
                                           ['overview'],
                                       vote: homeController.tv[index]
@@ -78,7 +77,6 @@ class HomeView extends GetView<HomeController> {
                               },
                               child: Container(
                                 padding: AppConstants.all_5,
-                                // color: Colors.green,
                                 width: 250,
                                 child: Column(
                                   children: [
@@ -87,15 +85,13 @@ class HomeView extends GetView<HomeController> {
                                         borderRadius: BorderRadius.circular(10),
                                         image: DecorationImage(
                                             image: NetworkImage(
-                                                'https://image.tmdb.org/t/p/w500' +
-                                                    homeController.tv[index]
-                                                        ['backdrop_path']),
+                                                "${AppConstants.kThemoviedbImageURL}${homeController.tv[index]['backdrop_path']}"),
                                             fit: BoxFit.cover),
                                       ),
                                       height: 140,
                                     ),
                                     AppConstants.h_5,
-                                    Container(
+                                    SizedBox(
                                       child: ModifiedText(
                                         size: 15,
                                         text: homeController.tv[index]
@@ -109,33 +105,17 @@ class HomeView extends GetView<HomeController> {
                               ),
                             );
                           })),
-                if (homeController.tv.isEmpty)
-                  const CircularProgressIndicator(
-                    color: Colors.red,
-                  ),
+                if (homeController.tv.isEmpty) AppConstants.loader,
                 if (homeController.trendingmovies.isNotEmpty)
                   TrendingMovies(
                     trending: homeController.trendingmovies,
                   ),
-                // if (homeController.trendingmovies.isNotEmpty)
-                //   MovieCardContainer(
-                //       themeColor: AppConstants.kMainGreenColor,
-                //       scrollController: homeController.scrollController!,
-                //       movieCards: genMovie())
-                if (homeController.trendingmovies.isEmpty)
-                  Container(
-                      height: 150,
-                      child: const CircularProgressIndicator(
-                        color: Colors.red,
-                      )),
+                if (homeController.trendingmovies.isEmpty) AppConstants.loader,
                 if (homeController.topratedmovies.isNotEmpty)
                   TopRatedMovies(
                     toprated: homeController.topratedmovies,
                   ),
-                if (homeController.trendingmovies.isEmpty)
-                  const CircularProgressIndicator(
-                    color: Colors.red,
-                  ),
+                if (homeController.trendingmovies.isEmpty) AppConstants.loader,
               ],
             ),
           ),
@@ -147,62 +127,139 @@ class HomeView extends GetView<HomeController> {
     (yr.length > 4) ? year = yr.substring(0, 4) : year = "";
     return year;
   }
-
-  genMovie(int len, List list) {
-    final List<Padding> mc = List.generate(
-        homeController.trendingmovies.length,
-        (index) => Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: InkWell(
-                onTap: () {
-                  //Get.to(Description(name: name, description: description, bannerurl: bannerurl, posterurl: posterurl, vote: vote, launchon: launchon))
-                },
-                child: MovieCard(
-                    moviePreview: MoviePreview(
-                      id: "${homeController.trendingmovies[index]['id']}",
-                      imageUrl:
-                          "${AppConstants.kThemoviedbImageURL}${homeController.trendingmovies[index]["poster_path"]}",
-                      isFavorite: false,
-                      overview: homeController.trendingmovies[index]
-                          ['overview'],
-                      rating: double.parse(homeController.trendingmovies[index]
-                              ['vote_average']
-                          .toString()),
-                      year: getYear(
-                          "${homeController.trendingmovies[index]['year']}"),
-                      title: "${homeController.trendingmovies[index]['title']}",
-                    ),
-                    themeColor: AppConstants.kMainGreenColor),
-              ),
-            ));
-    return mc;
-  }
 }
 
-class MovieCardContainer extends StatelessWidget {
-  final Color themeColor;
-  final ScrollController scrollController;
-  final List<Padding> movieCards;
+class TrendingMovies extends StatelessWidget {
+  final List trending;
 
-  const MovieCardContainer({
-    required this.themeColor,
-    required this.scrollController,
-    required this.movieCards,
-  });
-
+  const TrendingMovies({Key? key, required this.trending}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(right: 10, left: 10),
-      child: SingleChildScrollView(
-        controller: scrollController,
-        child: Padding(
-          padding:AppConstants.all_10,
-          child: Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: movieCards,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const ModifiedText(
+            text: 'Trending Movies',
+            size: 26,
           ),
-        ),
+          const SizedBox(height: 10),
+          SizedBox(
+              height: 270,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: trending.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        Get.to(() => Description(
+                              name:
+                                  "${trending[index]['title'] ?? trending[index]['original_name']} ",
+                              bannerurl:
+                                  "${AppConstants.kThemoviedbImageURL}${trending[index]['backdrop_path']}",
+                              posterurl:
+                                  "${AppConstants.kThemoviedbImageURL}${trending[index]['poster_path']}",
+                              description:
+                                  trending[index]['overview'].toString(),
+                              vote: trending[index]['vote_average'].toString(),
+                              launchon:
+                                  trending[index]['release_date'].toString(),
+                            ));
+                      },
+                      child: SizedBox(
+                        width: 140,
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      "${AppConstants.kThemoviedbImageURL}${trending[index]['poster_path']}"),
+                                ),
+                              ),
+                              height: 200,
+                            ),
+                            AppConstants.h_5,
+                            SizedBox(
+                              child: ModifiedText(
+                                  size: 15,
+                                  text: trending[index]['title'] ??
+                                      trending[index]['original_name']),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }))
+        ],
+      ),
+    );
+  }
+}
+
+class TopRatedMovies extends StatelessWidget {
+  final List toprated;
+
+  const TopRatedMovies({Key? key, required this.toprated}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const ModifiedText(
+            text: 'Top Rated Movies',
+            size: 26,
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+              height: 270,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: toprated.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        Get.to(() => Description(
+                              name: "${toprated[index]['title'].toString()} ",
+                              bannerurl:
+                                  "${AppConstants.kThemoviedbImageURL}${toprated[index]['backdrop_path']}",
+                              posterurl:
+                                  "${AppConstants.kThemoviedbImageURL}${toprated[index]['poster_path']}",
+                              description: toprated[index]['overview'],
+                              vote: toprated[index]['vote_average'].toString(),
+                              launchon: toprated[index]['release_date'],
+                            ));
+                      },
+                      child: SizedBox(
+                        width: 140,
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      "${AppConstants.kThemoviedbImageURL}${toprated[index]['poster_path']}"),
+                                ),
+                              ),
+                              height: 200,
+                            ),
+                            AppConstants.h_5,
+                            SizedBox(
+                              child: ModifiedText(
+                                size: 15,
+                                text: toprated[index]['title'] ?? 'Loading',
+                                color: Colors.white,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }))
+        ],
       ),
     );
   }

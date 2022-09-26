@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:netflixclone/app/common/app_utils.dart';
+import 'package:netflixclone/app/modules/home/views/description_view.dart';
 
 import 'custom_loader.dart';
 
@@ -11,18 +13,24 @@ class MovieCard extends StatelessWidget {
   final Color themeColor;
   final int? contentLoadedFromPage;
 
-  const MovieCard({
+   const MovieCard({Key? key, 
     required this.moviePreview,
     required this.themeColor,
     this.contentLoadedFromPage,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> stars = getStars(rating: moviePreview.rating, starSize: 2);
+    List<Widget> stars = getStars(rating: double.parse(moviePreview.rating), starSize: 2);
 
-    return GestureDetector(
-      onTap: () async {},
+    return InkWell(
+      onTap: () => Get.to(() => Description(
+          name: moviePreview.title,
+          description: moviePreview.overview,
+          bannerurl: moviePreview.bannerUrl ?? moviePreview.imageUrl ?? "",
+          posterurl: moviePreview.imageUrl ?? "",
+          vote: moviePreview.rating,
+          launchon: moviePreview.year)),
       child: Padding(
         padding: AppConstants.all_5,
         child: Stack(
@@ -43,7 +51,7 @@ class MovieCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Column(
                             children: [
-                              Container(
+                              SizedBox(
                                 height: 20,
                                 child: CustomLoadingSpinKitRing(
                                     loadingColor: themeColor),
@@ -53,7 +61,7 @@ class MovieCard extends StatelessWidget {
                       imageUrl: moviePreview.imageUrl!,
                       errorWidget: (context, url, error) => Column(
                             children: [
-                              Container(
+                              SizedBox(
                                 height: 20,
                                 child: CustomLoadingSpinKitRing(
                                     loadingColor: themeColor),
@@ -75,7 +83,7 @@ class MovieCard extends StatelessWidget {
                     color: Colors.transparent,
                   ),
                   child: Padding(
-                    padding:const EdgeInsets.all(3),
+                    padding: const EdgeInsets.all(3),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -110,7 +118,7 @@ class MovieCard extends StatelessWidget {
                           ],
                         ),
                         AppConstants.h_5,
-                        if (stars.length != 0) Row(children: stars),
+                        if (stars.isNotEmpty) Row(children: stars),
                         AppConstants.h_5,
                         // SizedBox(
                         //   width: 50,
@@ -158,17 +166,16 @@ class MovieCard extends StatelessWidget {
     }
     return temp;
   }
-
-
 }
 
 class MoviePreview {
   final String id;
   final String title;
   final String? imageUrl;
+  final String? bannerUrl;
   final String year;
   final bool isFavorite;
-  final double rating;
+  final String rating;
   String overview;
 
   MoviePreview({
@@ -179,6 +186,7 @@ class MoviePreview {
     required this.isFavorite,
     required this.overview,
     required this.rating,
+    required this.bannerUrl,
   });
 }
 
@@ -186,7 +194,7 @@ class StarIcon extends StatelessWidget {
   final IconData icon;
   final double size;
 
-  StarIcon({required this.icon, required this.size});
+   const StarIcon({Key? key, required this.icon, required this.size}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Icon(

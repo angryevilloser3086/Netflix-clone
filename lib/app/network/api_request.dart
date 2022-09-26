@@ -25,33 +25,66 @@ class ApiRequest {
 
     var data = await _getData(
       url:
-          '${AppConstants.kThemoviedbSearchURL}/?api_key=${apikey}&language=en-US&page=1&include_adult=false&query=$movieName',
+          '${AppConstants.kThemoviedbSearchURL}/?api_key=$apikey&language=en-US&page=1&include_adult=false&query=$movieName',
     );
 
-    print(data);
+    print(data['results'][0]);
 
     for (var item in data["results"]) {
+      // print(item["backdrop_path"].toString() + "banner");
+      // print(item["poster_path"] + "Poster");
       try {
-        temp.add(
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: MovieCard(
-              moviePreview: MoviePreview(
-                // isFavorite:
-                //     await isMovieInFavorites(movieID: item["id"].toString()),
-                year: (item["release_date"].toString().length > 4)
-                    ? item["release_date"].toString().substring(0, 4)
-                    : "",
-                imageUrl: "https://image.tmdb.org/t/p/w500${item["poster_path"]}",
-                title: item["title"],
-                id: item["id"].toString(),
-                rating: item["vote_average"].toDouble(),
-                overview: item["overview"], isFavorite: false,
+        if (item['backdrop_path'] != null) {
+          temp.add(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MovieCard(
+                moviePreview: MoviePreview(
+                  // isFavorite:
+                  //     await isMovieInFavorites(movieID: item["id"].toString()),
+                  year: (item["release_date"].toString().length > 4)
+                      ? item["release_date"].toString().substring(0, 4)
+                      : "",
+                  imageUrl:
+                      "https://image.tmdb.org/t/p/w500${item["poster_path"]}",
+                  title: item["title"],
+                  id: item["id"].toString(),
+                  rating: item["vote_average"].toString(),
+                  overview: item["overview"].toString(),
+                  isFavorite: false,
+                  bannerUrl:
+                      "https://image.tmdb.org/t/p/w500${item['backdrop_path']}",
+                ),
+                themeColor: themeColor,
               ),
-              themeColor: themeColor,
             ),
-          ),
-        );
+          );
+        } else {
+          temp.add(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MovieCard(
+                moviePreview: MoviePreview(
+                  // isFavorite:
+                  //     await isMovieInFavorites(movieID: item["id"].toString()),
+                  year: (item["release_date"].toString().length > 4)
+                      ? item["release_date"].toString().substring(0, 4)
+                      : "",
+                  imageUrl:
+                      "https://image.tmdb.org/t/p/w500${item["poster_path"]}",
+                  title: item["title"],
+                  id: item["id"].toString(),
+                  rating: item["vote_average"].toString(),
+                  overview: item["overview"].toString(),
+                  isFavorite: false,
+                  bannerUrl:
+                      "https://image.tmdb.org/t/p/w500${item['poster_path']}",
+                ),
+                themeColor: themeColor,
+              ),
+            ),
+          );
+        }
       } catch (e, s) {
         print(s);
         print(item["release_date"]);

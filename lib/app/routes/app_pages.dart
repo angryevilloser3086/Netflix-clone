@@ -1,9 +1,7 @@
 import 'package:get/get.dart';
 import 'package:netflixclone/app/modules/home/bindings/login_bindings.dart';
-import 'package:netflixclone/app/modules/home/bindings/otp_binding.dart';
 import 'package:netflixclone/app/modules/home/bindings/splash_binding.dart';
 import 'package:netflixclone/app/modules/home/views/login_view.dart';
-import 'package:netflixclone/app/modules/home/views/otp_view.dart';
 import 'package:netflixclone/app/modules/home/views/splash_view.dart';
 
 import '../modules/home/bindings/home_binding.dart';
@@ -26,11 +24,6 @@ class AppPages {
       name: _Paths.SPLASH,
       page: () =>  SplashScreen(),
       binding: SplashBinding(),
-    ),
-    GetPage(
-      name: _Paths.OTPSCREEN,
-      page: () => OTPView(),
-      binding: OTPBinding(),
     ),
     GetPage(
       name: _Paths.LOGIN,

@@ -5,7 +5,7 @@ import 'package:netflixclone/app/common/app_utils.dart';
 import '../../../common/custom_loader.dart';
 import '../../../common/movie_card.dart';
 import '../controllers/findview_controller.dart';
-import 'home_view.dart';
+import 'movie_container.dart';
 
 class FindView extends GetView<FindController> {
   FindView({Key? key}) : super(key: key);
@@ -38,34 +38,23 @@ class FindView extends GetView<FindController> {
         ),
         backgroundColor: AppConstants.kBackgroundShadowColor,
         body: Obx(() => Container(
-              child: (homeController.res.isEmpty)
-                  ? ((homeController.showloader)
-                      ? CustomLoadingSpinKitRing(
-                          loadingColor: AppConstants.kMainBlueColor)
-                      : null)
-                  : (homeController.res.isEmpty)
-                      ? const Center(
-                          child: Text(
-                          AppConstants.kNotFoundErrorText,
-                          style: AppConstants.kSplashScreenTextStyle,
-                        ))
-                      : MovieCardContainer(
-                          scrollController: homeController.scrollController ??
-                              ScrollController(),
-                          themeColor: AppConstants.kMainBlueColor,
-                          movieCards:
-                              homeController.res.toList().cast<Padding>(),
-                        ),
-
-              // floatingActionButton: showBackToTopButton
-              //     ? ShadowlessFloatingButton(
-              //         backgroundColor: widget.themeColor,
-              //         iconData: Icons.keyboard_arrow_up_outlined,
-              //         onPressed: () =>
-              //             ,
-              //       )
-              //     : null,
-            )));
+            child: (homeController.res.isEmpty)
+                ? ((homeController.showloader)
+                    ? const CustomLoadingSpinKitRing(
+                        loadingColor: AppConstants.kMainBlueColor)
+                    : null)
+                : (homeController.res.isEmpty)
+                    ? const Center(
+                        child: Text(
+                        AppConstants.kNotFoundErrorText,
+                        style: AppConstants.kSplashScreenTextStyle,
+                      ))
+                    : MovieCardContainer(
+                        scrollController: homeController.scrollController ??
+                            ScrollController(),
+                        themeColor: AppConstants.kMainBlueColor,
+                        movieCards: homeController.res.toList().cast<Padding>(),
+                      ))));
   }
 
   genMovie(int len, List list) {
@@ -84,10 +73,10 @@ class FindView extends GetView<FindController> {
                           "${AppConstants.kThemoviedbImageURL}${list[index]["poster_path"]}",
                       isFavorite: false,
                       overview: list[index]['overview'],
-                      rating:
-                          double.parse(list[index]['vote_average'].toString()),
+                      rating: list[index]['vote_average'].toString(),
                       year: getYear("${list[index]['year']}"),
                       title: "${list[index]['title']}",
+                      bannerUrl: '',
                     ),
                     themeColor: AppConstants.kMainGreenColor),
               ),

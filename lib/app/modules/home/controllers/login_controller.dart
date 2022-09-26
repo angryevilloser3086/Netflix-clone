@@ -2,10 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:netflixclone/app/routes/app_pages.dart';
 
-import '../views/otp_screen.dart';
-import '../views/screen.dart';
+import '../views/home_view.dart';
 
 class LoginController extends GetxController {
   TextEditingController phoneTextController = TextEditingController();
@@ -30,8 +28,8 @@ class LoginController extends GetxController {
         codeSent: (String verficationID, int? resendToken) async {
           //getStorage.write("verificationID", verficationID);
           //verificationCode = verficationID;
-          print("${resendToken} resendToken");
-          print("$verficationID codesent");
+          // print("${resendToken} resendToken");
+          // print("$verficationID codesent");
           verificationCode = verficationID;
         },
         codeAutoRetrievalTimeout: (String verificationID) {
@@ -44,7 +42,7 @@ class LoginController extends GetxController {
   }
 
   Future otpSaved() async {
-    print(verificationCode);
+    // print(verificationCode);
     try {
       await FirebaseAuth.instance
           .signInWithCredential(PhoneAuthProvider.credential(
@@ -53,7 +51,7 @@ class LoginController extends GetxController {
           .then((value) async {
         if (value.user != null) {
           getStorage.write("id", value.user?.uid);
-          Get.to(() => HomePage());
+          Get.offAll(() => HomeView());
         }
       });
     } catch (e) {

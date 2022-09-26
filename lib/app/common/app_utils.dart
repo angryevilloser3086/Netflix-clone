@@ -6,7 +6,7 @@ class AppConstants {
 static const kThemoviedbURL = "https://api.themoviedb.org/3/movie";
 static const kThemovieDiscoverdbURL = "https://api.themoviedb.org/3/discover/movie";
 static const kThemoviedbSearchURL = "https://api.themoviedb.org/3/search/movie";
-static const kThemoviedbImageURL = "https://image.tmdb.org/t/p/w300";
+static const kThemoviedbImageURL = "https://image.tmdb.org/t/p/w500";
 static const kHomeScreenButtonFirstText = "Populars";
 static const kHomeScreenButtonSecondText = "Coming Soon";
 static const kHomeScreenButtonThirdText = "Top Rated";
@@ -39,7 +39,7 @@ static const kBoxShadow = [
     color: kPrimaryColor,
     spreadRadius: 5,
     blurRadius: 30,
-    offset: const Offset(0, 3),
+    offset: Offset(0, 3),
   ),
 ];
 
@@ -89,7 +89,7 @@ static const kSmallAppBarTitleTextStyle = TextStyle(
 
 static const kSmallTitleTextStyle = TextStyle(fontSize: 18);
 
-static const kTextFieldDecoration = const InputDecoration(
+static const kTextFieldDecoration = InputDecoration(
   border: InputBorder.none,
   focusedBorder: InputBorder.none,
   enabledBorder: InputBorder.none,
@@ -99,7 +99,7 @@ static const kTextFieldDecoration = const InputDecoration(
 
 static const kMovieAppBarTitleTextStyle = TextStyle(fontSize: 22);
 
-static const kDetailScreenBoldTitle = const TextStyle(
+static const kDetailScreenBoldTitle = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.bold,
 );
@@ -157,6 +157,11 @@ static const kDetailScreenRegularTitle = TextStyle(
   static const left10 = EdgeInsets.only(left: 10);
   static const left20 = EdgeInsets.only(left: 20);
   static const left100 = EdgeInsets.only(left: 100);
+
+
+  
+  static const loader = Center(
+      child: CircularProgressIndicator(color: Colors.red));
   
 
 }
@@ -183,11 +188,12 @@ class ModifiedText extends StatelessWidget {
           size: starSize,
         ));
       }
-      if (rating > 0 && rating % 2 != 0)
+      if (rating > 0 && rating % 2 != 0) {
         temp.add(StarIcon(
           icon: Icons.star_half,
           size: starSize,
         ));
+      }
       while (temp.length < 5) {
         temp.add(StarIcon(
           icon: Icons.star_border,
@@ -197,5 +203,7 @@ class ModifiedText extends StatelessWidget {
     }
     return temp;
   }
+
+
 
 }

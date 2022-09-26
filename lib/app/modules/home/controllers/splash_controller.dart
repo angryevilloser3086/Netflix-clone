@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:netflixclone/app/modules/home/views/screen.dart';
 
 import '../../../routes/app_pages.dart';
 

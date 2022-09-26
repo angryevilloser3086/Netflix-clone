@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:netflixclone/app/common/app_utils.dart';
 import 'package:netflixclone/app/network/api_request.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 
 class HomeController extends GetxController {
+  final getStorage = GetStorage();
   ApiRequest apiRequest = ApiRequest();
   bool showloader = true;
   String textFieldValue = "";
@@ -52,6 +54,7 @@ class HomeController extends GetxController {
     trendingmovies.addAll(trendingresult['results']);
     topratedmovies.addAll(topratedresult['results']);
     tv.addAll(tvresult['results']);
+    tv.addAll(popular['results']);
   }
 
   findMovies(String text) async {

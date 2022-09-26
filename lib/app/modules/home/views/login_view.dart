@@ -22,6 +22,8 @@ class LoginScreen extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
     ),
   );
+
+  LoginScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

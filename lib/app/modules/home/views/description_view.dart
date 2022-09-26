@@ -20,6 +20,7 @@ class Description extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    print(vote);
     List<Widget> stars = getStars(rating: double.parse(vote), starSize: 20);
     return Scaffold(
       backgroundColor: Colors.black,
@@ -110,11 +111,12 @@ class Description extends GetView<HomeController> {
           size: starSize,
         ));
       }
-      if (rating > 0 && rating % 2 != 0)
+      if (rating > 0 && rating % 2 != 0) {
         temp.add(StarIcon(
           icon: Icons.star_half,
           size: starSize,
         ));
+      }
       while (temp.length < 5) {
         temp.add(StarIcon(
           icon: Icons.star_border,
