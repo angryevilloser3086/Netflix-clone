@@ -50,61 +50,9 @@ class HomeView extends GetView<HomeController> {
             child: Column(
               children: [
                 AppConstants.h_10,
-                if (homeController.tv.isNotEmpty)
-                  SizedBox(
-                      height: 200,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: homeController.tv.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                Get.to(() => Description(
-                                      name:
-                                          "${homeController.tv[index]['title'].toString()} ",
-                                      bannerurl:
-                                          "${AppConstants.kThemoviedbImageURL}${homeController.tv[index]['backdrop_path']}",
-                                      posterurl:
-                                          "${AppConstants.kThemoviedbImageURL}${homeController.tv[index]['poster_path']}",
-                                      description: homeController.tv[index]
-                                          ['overview'],
-                                      vote: homeController.tv[index]
-                                              ['vote_average']
-                                          .toString(),
-                                      launchon:
-                                          "${homeController.tv[index]['release_date']} ",
-                                    ));
-                              },
-                              child: Container(
-                                padding: AppConstants.all_5,
-                                width: 250,
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                "${AppConstants.kThemoviedbImageURL}${homeController.tv[index]['backdrop_path']}"),
-                                            fit: BoxFit.cover),
-                                      ),
-                                      height: 140,
-                                    ),
-                                    AppConstants.h_5,
-                                    SizedBox(
-                                      child: ModifiedText(
-                                        size: 15,
-                                        text: homeController.tv[index]
-                                                ['title'] ??
-                                            'Loading',
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          })),
+                if (homeController.topratedmovies.isNotEmpty)
+                  upcomingShows(homeController.upcoming),
+                if (homeController.tv.isNotEmpty) tvShows(homeController.tv),
                 if (homeController.tv.isEmpty) AppConstants.loader,
                 if (homeController.trendingmovies.isNotEmpty)
                   TrendingMovies(
@@ -116,10 +64,142 @@ class HomeView extends GetView<HomeController> {
                     toprated: homeController.topratedmovies,
                   ),
                 if (homeController.trendingmovies.isEmpty) AppConstants.loader,
+                
               ],
             ),
           ),
         ));
+  }
+
+  tvShows(List list) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Padding(
+          padding: AppConstants.all_5,
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: ModifiedText(
+              text: 'TV SHOWS',
+              size: 26,
+            ),
+          ),
+        ),
+        SizedBox(
+            height: 200,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: homeController.tv.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      Get.to(() => Description(
+                            name: "${list[index]['title'].toString()} ",
+                            bannerurl:
+                                "${AppConstants.kThemoviedbImageURL}${list[index]['backdrop_path']}",
+                            posterurl:
+                                "${AppConstants.kThemoviedbImageURL}${list[index]['poster_path']}",
+                            description: list[index]['overview'],
+                            vote: list[index]['vote_average'].toString(),
+                            launchon: "${list[index]['release_date']} ",
+                          ));
+                    },
+                    child: Container(
+                      padding: AppConstants.all_5,
+                      width: 250,
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      "${AppConstants.kThemoviedbImageURL}${list[index]['backdrop_path']}"),
+                                  fit: BoxFit.cover),
+                            ),
+                            height: 140,
+                          ),
+                          AppConstants.h_5,
+                          SizedBox(
+                            child: ModifiedText(
+                              size: 15,
+                              text: list[index]['title'] ?? 'Loading',
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                })),
+      ],
+    );
+  }
+
+  upcomingShows(List list) {
+    print(list.length);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Padding(
+          padding: AppConstants.all_5,
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: ModifiedText(
+              text: 'Popular Movies',
+              size: 26,
+            ),
+          ),
+        ),
+        SizedBox(
+            height: 200,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: homeController.tv.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      Get.to(() => Description(
+                            name: "${list[index]['title'].toString()} ",
+                            bannerurl:
+                                "${AppConstants.kThemoviedbImageURL}${list[index]['backdrop_path']}",
+                            posterurl:
+                                "${AppConstants.kThemoviedbImageURL}${list[index]['poster_path']}",
+                            description: list[index]['overview'],
+                            vote: list[index]['vote_average'].toString(),
+                            launchon: "${list[index]['release_date']} ",
+                          ));
+                    },
+                    child: Container(
+                      padding: AppConstants.all_5,
+                      width: 250,
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      "${AppConstants.kThemoviedbImageURL}${list[index]['backdrop_path']}"),
+                                  fit: BoxFit.cover),
+                            ),
+                            height: 140,
+                          ),
+                          AppConstants.h_5,
+                          SizedBox(
+                            child: ModifiedText(
+                              size: 15,
+                              text: list[index]['title'] ?? 'Loading',
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                })),
+      ],
+    );
   }
 
   getYear(String yr) {

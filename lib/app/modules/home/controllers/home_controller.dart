@@ -18,6 +18,7 @@ class HomeController extends GetxController {
   List topratedmovies = [].obs;
   List tv = [].obs;
   List res = [].obs;
+  List upcoming = [].obs;
   @override
   void onInit() {
     super.onInit();
@@ -54,7 +55,8 @@ class HomeController extends GetxController {
     trendingmovies.addAll(trendingresult['results']);
     topratedmovies.addAll(topratedresult['results']);
     tv.addAll(tvresult['results']);
-    tv.addAll(popular['results']);
+    
+    upcoming.addAll(popular['results']);
   }
 
   findMovies(String text) async {
